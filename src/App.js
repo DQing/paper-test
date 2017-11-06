@@ -1,6 +1,6 @@
 import React from 'react';
-import {Table, Popconfirm, Input, Icon} from 'antd';
-import 'antd/dist/antd.css';
+import { Link } from 'react-router-dom'
+import {Table, Popconfirm, Input, Icon, Button} from 'antd';
 import './App.css'
 class EditableCell extends React.Component {
     state = {
@@ -32,7 +32,7 @@ class EditableCell extends React.Component {
                                   onClick={this.check}/>
                         </div> :
                         <div className="editable-cell-text-wrapper">
-                            <a href="http://www.baidu.com">{value || ' '}</a>
+                            <Link to="/paper">{value || ' '}</Link>
                             <Icon type='edit'
                                   className="editable-cell-icon"
                                   onClick={this.edit}/>
@@ -44,7 +44,6 @@ class EditableCell extends React.Component {
 }
 
 class App extends React.Component {
-
 
     constructor(props) {
         super(props);
@@ -95,7 +94,8 @@ class App extends React.Component {
                 name: '前端试卷',
                 person: 'huanglizhen',
                 time: '2017-11-06'
-            }]
+            }],
+            count: 4
         };
 
     }
@@ -115,10 +115,27 @@ class App extends React.Component {
         };
     };
 
+
+    handleAdd = ()=> {
+        const {count, dataSource} = this.state;
+        const newData = {
+            key: count,
+            name: `test ${count}`,
+            person: `person ${count}`,
+            time: new Date().toLocaleDateString()
+        };
+        this.setState({
+            dataSource: [...dataSource, newData],
+            count: count + 1
+
+        });
+    };
+
     render() {
         const columns = this.columns;
         return (
             <div style={{width: 400, margin: '100px auto'}}>
+                <Button className="editable-add-btn" onClick={this.handleAdd}>Add</Button>
                 <Table dataSource={this.state.dataSource} columns={columns}/>
             </div>
         );

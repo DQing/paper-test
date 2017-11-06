@@ -1,0 +1,9 @@
+.paper {
+    margin: 20px 20%;
+    border: 1px solid gainsboro;
+    padding: 20px;
+    font-size: 14px;
+}
+Input{
+    width: 50px;
+}
