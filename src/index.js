@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-    HashRouter,
     Switch,
     Route,
+    BrowserRouter,
 } from 'react-router-dom'
 import './index.css';
 import 'antd/dist/antd.css';
@@ -12,12 +12,12 @@ import Paper from './Paper';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
-    <HashRouter>
+    <BrowserRouter>
         <Switch>
             <Route exact path="/" component={App}/>
             <Route path="/paper" component={Paper}/>
         </Switch>
-    </HashRouter>,
+    </BrowserRouter>,
     document.getElementById('root'));
 registerServiceWorker();
 
