@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {Table, Popconfirm, Input, Icon, Button} from 'antd';
 import './App.css'
 class EditableCell extends React.Component {
@@ -129,12 +129,41 @@ class App extends React.Component {
             count: count + 1
 
         });
+        // fetch('./api/live')
+        //     .then(function (response) {
+        //         return response.json();
+        //     }).then(function (jsonData) {
+        //     console.log(jsonData);
+        // }).catch(function () {
+        //     console.log('出错了');
+        // });
+
+        fetch('./api/save', {
+            method: 'post',
+            body: JSON.stringify({
+                create_time: new Date(),
+                creator: `person ${count}`,
+                name: `test ${count}`
+            }),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json; charset=utf8"
+            }
+        })
+            .then(function (response) {
+                return response.json();
+            }).then(function (jsonData) {
+            console.log(jsonData);
+        }).catch(function () {
+            console.log('出错了');
+        })
     };
+
 
     render() {
         const columns = this.columns;
         return (
-            <div style={{width: 400, margin: '100px auto'}}>
+            <div style={{width: 800, margin: '100px auto'}}>
                 <Button className="editable-add-btn" onClick={this.handleAdd}>Add</Button>
                 <Table dataSource={this.state.dataSource} columns={columns}/>
             </div>

@@ -27,3 +27,6 @@ Input {
     margin-top: 40px;
     margin-left: 50%;
 }
+.ant-radio-wrapper{
+    font-size: 13px;
+}
