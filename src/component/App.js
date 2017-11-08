@@ -1,19 +1,44 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
-import {Table, Popconfirm, Input, Icon, Button} from 'antd';
-import './App.css'
+import {Table, Popconfirm, Input, Icon, Button, message} from 'antd';
+import '../css/App.css'
+
 class EditableCell extends React.Component {
     state = {
         value: this.props.value,
         editable: false
     };
-    handleChange = (e)=> {
+    handleChange = (e) => {
         this.setState({value: e.target.value})
     };
-    check = ()=> {
-        this.setState({editable: false})
+    check = () => {
+        let that = this;
+        this.setState({editable: false});
+        let id = that.props.id;
+        let value = that.state.value;
+        console.log(value);
+        fetch('./api/update', {
+            method: 'put',
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json; charset=utf8"
+            },
+            body: JSON.stringify({
+                id, name: value
+            })
+        })
+            .then(function (response) {
+                response.json().then(json => {
+                    that.setState({dataSource: json.data});
+                    console.log(json.data);
+                    console.log('更新成功');
+                });
+            }).catch(function () {
+            console.log('出错了');
+        })
+
     };
-    edit = ()=> {
+    edit = () => {
         this.setState({editable: true});
     };
 
@@ -50,27 +75,23 @@ class App extends React.Component {
         this.columns = [{
             title: '名称',
             dataIndex: 'name',
-            key: 'name',
-            render: (text, record)=>(
-                <EditableCell value={text}
-                              onChange={this.onCellChange(record.key, 'name')}/>
+            render: (text, record) => (
+                <EditableCell value={text} id={record.id}
+                              onChange={this.onCellChange(record.id, 'name')}/>
             )
         }, {
             title: '创建人',
-            dataIndex: 'person',
-            key: 'person',
+            dataIndex: 'creator',
         }, {
             title: '创建时间',
-            dataIndex: 'time',
-            key: 'time',
+            dataIndex: 'createTime',
         }, {
             title: '操作',
             dataIndex: 'option',
-            key: 'option',
-            render: (text, record)=> {
+            render: (text, record) => {
                 return (
                     this.state.dataSource.length > 1 ? (
-                        <Popconfirm title="Sure to delete?" onConfirm={()=> this.onDelete(record.key)}>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(record.id)}>
                             <a href="#">Delete</a>
                         </Popconfirm>
                     ) : null
@@ -79,82 +100,81 @@ class App extends React.Component {
         }];
 
         this.state = {
-            dataSource: [{
-                key: '1',
-                name: '前端试卷',
-                person: 'douqing',
-                time: '2017-11-06'
-            }, {
-                key: '2',
-                name: '后端试卷',
-                person: 'huanglizhen',
-                time: '2017-11-06'
-            }, {
-                key: '3',
-                name: '前端试卷',
-                person: 'huanglizhen',
-                time: '2017-11-06'
-            }],
+            dataSource: [],
             count: 4
         };
 
     }
 
-    onDelete = function (key) {
+    componentWillMount = function () {
+        let that = this;
+        fetch('./api/getPaperList', {
+            method: 'get',
+        })
+            .then(function (response) {
+                response.json().then(json => {
+                    that.setState({dataSource: json.result});
+                });
+            }).catch(function () {
+            console.log('出错了');
+        })
+    };
+    onDelete = function (id) {
         const dataSource = [...this.state.dataSource];
-        this.setState({dataSource: dataSource.filter(item=>item.key !== key)});
+        this.setState({dataSource: dataSource.filter(item => item.id !== id)});
+        fetch(`./api/delete/${id}`, {
+            method: 'delete',
+        })
+            .then(function (response) {
+                response.json().then(json => {
+                    message.info(json.result);
+                });
+            }).catch(function () {
+            console.log('出错了');
+        })
     };
     onCellChange = (key, dataIndex) => {
+
         return (value) => {
             const dataSource = [...this.state.dataSource];
-            const target = dataSource.find(item => item.key === key);
+            const target = dataSource.find(item => item.id === key);
             if (target) {
                 target[dataIndex] = value;
                 this.setState({dataSource});
             }
+
         };
+
     };
 
 
-    handleAdd = ()=> {
+    handleAdd = () => {
         const {count, dataSource} = this.state;
         const newData = {
-            key: count,
             name: `test ${count}`,
-            person: `person ${count}`,
-            time: new Date().toLocaleDateString()
+            creator: `person ${count}`,
+            createTime: new Date().toLocaleDateString()
         };
         this.setState({
             dataSource: [...dataSource, newData],
             count: count + 1
 
         });
-        // fetch('./api/live')
-        //     .then(function (response) {
-        //         return response.json();
-        //     }).then(function (jsonData) {
-        //     console.log(jsonData);
-        // }).catch(function () {
-        //     console.log('出错了');
-        // });
 
         fetch('./api/save', {
             method: 'post',
-            body: JSON.stringify({
-                create_time: new Date(),
-                creator: `person ${count}`,
-                name: `test ${count}`
-            }),
+            body: JSON.stringify(newData),
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json; charset=utf8"
             }
         })
             .then(function (response) {
-                return response.json();
-            }).then(function (jsonData) {
-            console.log(jsonData);
-        }).catch(function () {
+                response.json().then(json => {
+                    message.info(json.result);
+                    console.log(json);
+                });
+            }).catch(function () {
             console.log('出错了');
         })
     };
@@ -166,6 +186,7 @@ class App extends React.Component {
             <div style={{width: 800, margin: '100px auto'}}>
                 <Button className="editable-add-btn" onClick={this.handleAdd}>Add</Button>
                 <Table dataSource={this.state.dataSource} columns={columns}/>
+
             </div>
         );
     }

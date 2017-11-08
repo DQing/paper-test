@@ -5,10 +5,10 @@ import {
     Route,
     BrowserRouter,
 } from 'react-router-dom'
-import './index.css';
+import './css/index.css';
 import 'antd/dist/antd.css';
-import App from './App';
-import Paper from './Paper';
+import App from './component/App';
+import Paper from './component/Paper';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Radio, Button, Input} from 'antd';
-import './paper.css';
+import '../css/paper.css';
 class Paper extends React.Component {
     handleSubmit = ()=> {
 
