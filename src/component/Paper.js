@@ -1,82 +1,107 @@
+import '../css/Paper.css';
 import React from 'react';
-import {Radio, Button, Input} from 'antd';
-import '../css/paper.css';
-class Paper extends React.Component {
-    handleSubmit = ()=> {
+import {Layout, Button, Radio, Input, Col, Card} from 'antd';
 
+const {Header, Content, Footer} = Layout;
+const RadioGroup = Radio.Group;
+
+export default class PaperInfoPage extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            choiceQuiz: [{
+                id: 1,
+                description: "请选择下列说法正确的一项",
+                optionOne: "A",
+                optionTwo: "B",
+                optionThree: "C",
+                optionFour: "D",
+                type: "choice"
+            }, {
+                id: 2,
+                description: "请选择下列说法正确的一项",
+                optionOne: "A",
+                optionTwo: "B",
+                optionThree: "C",
+                optionFour: "D",
+                type: "choice"
+            }],
+            blankQuiz: [{
+                id: 1,
+                description: "js的全称",
+                type: "blank"
+            }, {
+                id: 2,
+                description: "js的全称",
+                type: "blank"
+            }]
+        }
+    }
+
+    // componentDidMount() {
+    //     this.props.getPaperName(parseInt(this.props.match.params.id));
+    // }
+
+    render() {
+        return <Layout>
+            <Header>
+                <h1 className="header">{this.props.name}</h1>
+            </Header>
+            <Content style={{padding: '20px 0', background: "white"}}>
+                {this.state.choiceQuiz.length > 0 ? <ChoiceQuiz choiceQuiz={this.state.choiceQuiz}/> : ""}
+                {this.state.blankQuiz.length > 0 ? <BlankQuiz blankQuiz={this.state.blankQuiz}/> : ""}
+            </Content>
+            <Footer style={{background: "white"}}>
+                <Button type="primary">提交</Button>
+            </Footer>
+        </Layout>;
+    }
+};
+
+class ChoiceQuiz extends React.Component {
+    onChange = (e) => {
+        console.log('radio checked', e.target.value);
+        this.setState({
+            value: e.target.value,
+        });
     };
 
     render() {
-        return (
-            <div className="paper">
-                <BaseQuiz/>
-                <FillBlankQuiz/>
-                <Button className="editable-add-btn" onClick={this.handleSubmit}>Submit</Button>
+        return <div>
+            <Col className="gutter-row" span={22} offset={1}>
+                <Card className="tws-card" noHovering title="一、选择题">
+                    {this.props.choiceQuiz.map((c, i) => {
+                        return <div key={i} style={{margin: "10px 0"}}>
+                            <h3>{i + 1}、{c.description}</h3>
+                            <RadioGroup onChange={this.onChange}>
+                                <Radio value="A">{c.optionOne}</Radio>
+                                <Radio value="B">{c.optionTwo}</Radio>
+                                <Radio value="C">{c.optionThree}</Radio>
+                                <Radio value="D">{c.optionFour}</Radio>
+                            </RadioGroup>
+                        </div>
+                    })}    </Card>
+            </Col>
 
-            </div>
-        )
+        </div>
     }
 }
 
-class BaseQuiz extends React.Component {
+class BlankQuiz extends React.Component {
+
     render() {
-        return (
-            <div className="baseQuiz">
-
-                <h2>选择题</h2>
-                <div className="quiz">
-                    <h3>1.UML与软件工程的关系是：</h3>
-                    <p>
-                        <Radio>(A)UML就是软件工程</Radio>
-                    </p>
-                    <p>
-                        <Radio>(B)UML参与到软件工程中软件开发过程的几个阶段</Radio>
-                    </p>
-                    <p>
-                        <Radio>(C)UML与软件工程无关</Radio>
-                    </p>
-                    <p>
-                        <Radio>(D)UML是软件工程的一部分</Radio>
-                    </p>
-                </div>
-                <div className="quiz">
-                    <h3>2.UML与软件工程的关系是：</h3>
-                    <p>
-                        <Radio>(A)UML就是软件工程</Radio>
-                    </p>
-                    <p>
-                        <Radio>(B)UML参与到软件工程中软件开发过程的几个阶段</Radio>
-                    </p>
-                    <p>
-                        <Radio>(C)UML与软件工程无关</Radio>
-                    </p>
-                    <p>
-                        <Radio>(D)UML是软件工程的一部分</Radio>
-                    </p>
-                </div>
-
-            </div>
-        )
+        const {TextArea} = Input;
+        return <div>
+            <Col className="gutter-row" span={22} offset={1}>
+                <Card className="tws-card" noHovering title="二、填空题">
+                    {this.props.blankQuiz.map((b, i) => {
+                        return <div key={i} style={{margin: "10px 0"}}>
+                            <h3>{i + 1}、{b.description}</h3>
+                            <TextArea rows={4}/>
+                        </div>
+                    })}
+                </Card>
+            </Col>
+        </div>
     }
 }
-class FillBlankQuiz extends React.Component {
-    render() {
-        return (
-            <div>
-                <h2>填空题</h2>
-                <div className="quiz">
-                    <p>1.UML的中文全称是：</p>
-                    <Input/>
-                </div>
-                <div className="quiz">
-                    <p>2.对象最突出的特征是：</p>
-                    <Input/>
-                </div>
-            </div>
-        )
-    }
-
-}
-
-
-export default Paper;

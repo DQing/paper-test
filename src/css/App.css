@@ -1,8 +1,4 @@
 
-html, body, #root {
-    height: 100%;
-}
-
 .editable-cell {
     position: relative;
 }
@@ -46,6 +42,3 @@ html, body, #root {
     margin-bottom: 8px;
 }
 
-.ant-table {
-    font-size: 13px;
-}
