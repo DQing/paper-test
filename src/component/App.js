@@ -41,8 +41,8 @@ export default class PaperList extends React.Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.error_msg) {
-            message.info(newProps.error_msg);
+        if (newProps.error_msg !== "") {
+            message.error(newProps.error_msg);
         }
     }
 

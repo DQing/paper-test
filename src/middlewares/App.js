@@ -1,14 +1,14 @@
 export default store => next => action => {
     if (action.type === "GET_PAPERS") {
-        fetch('./api/getPaperList', {
+        console.log('dfasfd');
+        fetch('./api/papers', {
             method: "get"
         }).then(response => {
             response.json().then((json) => {
-                if (json.result) {
-                    next({type: "GET_PAPERS_BACK", paperList: json.result});
-
+                if (json.code === 200) {
+                    next({type: "GET_PAPERS_BACK", paperList: json.data});
                 } else {
-                    next({type: "GET_PAPERS_BACK_ERROR", paperList: json.exception});
+                    next({type: "GET_PAPERS_BACK_ERROR", exception: json.exception});
                 }
             });
         })
@@ -28,10 +28,11 @@ export default store => next => action => {
             })
         }).then(response => {
             response.json().then((json) => {
-                if (json.result) {
-                    next({type: "ADD_BACK", paperList: json.result});
+                console.log(json);
+                if (json.code === 200) {
+                    next({type: "GET_PAPERS"});
                 } else {
-                    next({type: "ADD_BACK_ERROR", paperList: json.exception});
+                    next({type: "ADD_BACK_ERROR", exception: json.exception});
                 }
             });
         })
@@ -41,15 +42,15 @@ export default store => next => action => {
             method: "DELETE"
         }).then(response => {
             response.json().then((json) => {
-                if (json.result) {
-                    next({type: "DELETE_BACK", paperList: json.result});
+                if (json.code === 200) {
+                    action({type: "GET_PAPERS"});
                 } else {
-                    next({type: "DELETE_BACK_ERROR", paperList: json.exception});
+                    next({type: "DELETE_BACK_ERROR", exception: json.exception});
                 }
             });
         })
     } else if (action.type === "CHANGE_NAME") {
-        fetch(`./api/updateName`, {
+        fetch(`./api/paper`, {
             method: "PUT",
             headers: {
                 'Accept': 'application/json',
@@ -61,7 +62,7 @@ export default store => next => action => {
                 if (json.result) {
                     next({type: "CHANGE_BACK"});
                 } else {
-                    next({type: "CHANGE_BACK_ERROR", paperList: json.exception});
+                    next({type: "CHANGE_BACK_ERROR", exception: json.exception});
                 }
             })
         });
