@@ -1,18 +1,18 @@
 import {connect} from 'react-redux';
-import PaperInfoPage from '../component/Paper';
+import Paper from '../component/Paper';
 
 const mapStateToProps = (state) => {
     return {
-        name: state.papers.name
+        paper: state.papers.paper
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getPaperName: (id) => {
-            dispatch({type: "GET_NAME", id});
+        onSubmit: (insertAnswer) => {
+            dispatch({type: "SUBMIT",insertAnswer});
         }
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PaperInfoPage);
+export default connect(mapStateToProps, mapDispatchToProps)(Paper);

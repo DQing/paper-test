@@ -8,10 +8,6 @@ export default (state = {
         case "ADD_BACK":
             state.paperList = action.paperList;
             return Object.assign({}, state);
-        case "GET_PAPERS":
-            console.log('GET_PAPERS');
-            state.paperList = action.paperList;
-            return Object.assign({}, state);
         case "ADD_BACK_ERROR":
             state.error_msg = action.exception;
             return Object.assign({}, state);
@@ -22,7 +18,7 @@ export default (state = {
             state.error_msg = action.exception;
             return Object.assign({}, state);
         case "CHANGE_BACK":
-            state.changeNameSuccess = true;
+            state.Isuccess = true;
             return Object.assign({}, state);
         case "CHANGE_BACK_ERROR":
             state.error_msg = action.exception;
@@ -36,7 +32,6 @@ export default (state = {
             return Object.assign({}, state);
         case "GET_PAPERS_BACK_ERROR":
             state.error_msg = action.exception;
-            console.log('=====', action.exception);
             return Object.assign({}, state);
         default:
             return state;

@@ -1,6 +1,5 @@
 export default store => next => action => {
     if (action.type === "GET_PAPERS") {
-        console.log('dfasfd');
         fetch('./api/papers', {
             method: "get"
         }).then(response => {
@@ -30,7 +29,7 @@ export default store => next => action => {
             response.json().then((json) => {
                 console.log(json);
                 if (json.code === 200) {
-                    next({type: "GET_PAPERS"});
+                    store.dispatch({type: "GET_PAPERS"});
                 } else {
                     next({type: "ADD_BACK_ERROR", exception: json.exception});
                 }
@@ -43,7 +42,7 @@ export default store => next => action => {
         }).then(response => {
             response.json().then((json) => {
                 if (json.code === 200) {
-                    action({type: "GET_PAPERS"});
+                    store.dispatch({type: "GET_PAPERS"});
                 } else {
                     next({type: "DELETE_BACK_ERROR", exception: json.exception});
                 }
@@ -59,11 +58,15 @@ export default store => next => action => {
             body: JSON.stringify({id: action.id, name: action.name})
         }).then(res => {
             res.json().then(json => {
-                if (json.result) {
-                    next({type: "CHANGE_BACK"});
+                console.log('eee=', json);
+                if (json.code === 200) {
+                    next({type: 'CHANGE_BACK', paperList: json.data})
                 } else {
-                    next({type: "CHANGE_BACK_ERROR", exception: json.exception});
+                    next({type: 'CHANGE_BACK', paperList: json.data});
+                    // next({type: "CHANGE_BACK_ERROR", exception: json.exception});
                 }
+                // store.dispatch({type: "GET_PAPERS"});
+
             })
         });
     }

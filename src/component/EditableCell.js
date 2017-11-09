@@ -42,7 +42,7 @@ export default class EditableCell extends React.Component {
                         </div>
                         :
                         <div className="editable-cell-text-wrapper">
-                            <Link to={`/paperInfoPage/${this.state.id}`}>{value || ' '}</Link>
+                            <Link to={`/Paper/${this.state.id}`}>{value || ' '}</Link>
                             <Icon
                                 type="edit"
                                 className="editable-cell-icon"

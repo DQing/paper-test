@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter, Route} from 'react-router-dom';
 import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import reducer from './reducers/index';
 import 'antd/dist/antd.css';
 
 import App from './container/App';
-import paperInfoPage from "./container/Paper";
+import paper from "./container/Paper";
 
 import './css/index.css';
 import 'antd/dist/antd.css';
@@ -19,12 +19,12 @@ const createStoreWithMiddleWare = applyMiddleware(paperListMiddle)(createStore);
 const store = createStoreWithMiddleWare(reducer);
 
 ReactDOM.render(<Provider store={store}>
-    <Router>
+    <BrowserRouter>
         <div>
             <Route exact path="/" component={App}/>
-            <Route path="/paperInfoPage/:id" component={paperInfoPage}/>
+            <Route path="/paper/:id" component={paper}/>
         </div>
-    </Router></Provider>, document.getElementById('root'));
+    </BrowserRouter></Provider>, document.getElementById('root'));
 registerServiceWorker();
 
 
