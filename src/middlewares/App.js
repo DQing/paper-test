@@ -7,6 +7,8 @@ export default store => next => action => {
                 if (json.result) {
                     next({type: "GET_PAPERS_BACK", paperList: json.result});
 
+                } else {
+                    next({type: "GET_PAPERS_BACK_ERROR", paperList: json.exception});
                 }
             });
         })
@@ -28,6 +30,8 @@ export default store => next => action => {
             response.json().then((json) => {
                 if (json.result) {
                     next({type: "ADD_BACK", paperList: json.result});
+                } else {
+                    next({type: "ADD_BACK_ERROR", paperList: json.exception});
                 }
             });
         })
@@ -39,6 +43,8 @@ export default store => next => action => {
             response.json().then((json) => {
                 if (json.result) {
                     next({type: "DELETE_BACK", paperList: json.result});
+                } else {
+                    next({type: "DELETE_BACK_ERROR", paperList: json.exception});
                 }
             });
         })
@@ -54,6 +60,8 @@ export default store => next => action => {
             res.json().then(json => {
                 if (json.result) {
                     next({type: "CHANGE_BACK"});
+                } else {
+                    next({type: "CHANGE_BACK_ERROR", paperList: json.exception});
                 }
             })
         });

@@ -4,6 +4,7 @@ import App from '../component/App';
 const mapStateToProps = (state) => {
     return {
         paperList: state.papers.paperList,
+        error_msg: state.papers.error_msg,
     }
 };
 

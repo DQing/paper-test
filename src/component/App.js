@@ -1,5 +1,5 @@
 import React from 'react';
-import {Table, Button, Popconfirm} from 'antd';
+import {Table, Button, Popconfirm, message} from 'antd';
 import '../css/App.css';
 import EditableCell from './EditableCell';
 
@@ -38,6 +38,12 @@ export default class PaperList extends React.Component {
                 );
             },
         }];
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.error_msg) {
+            message.info(newProps.error_msg);
+        }
     }
 
     componentDidMount() {
